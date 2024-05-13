@@ -20,6 +20,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing", from: "0.4.0"),
+        .package(url: "https://github.com/dev4dev/swift-composable-architecture", branch: "ObservableStateMacroIgnore")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -37,7 +39,10 @@ let package = Package(
         .target(name: "Example", dependencies: ["ExampleMacros"]),
 
         // A client of the library, which is able to use the macro in its own code.
-        .executableTarget(name: "ExampleClient", dependencies: ["Example"]),
+        .executableTarget(name: "ExampleClient", dependencies: [
+            "Example",
+            .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+        ]),
 
         // A test target used to develop the macro implementation.
         .testTarget(
